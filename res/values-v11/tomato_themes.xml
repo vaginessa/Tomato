@@ -1,0 +1,16 @@
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="Tomato" parent="android:Theme.Holo.Light">
+
+    <item name="android:editTextBackground">@drawable/edit_text_holo_light</item>
+
+    <item name="android:buttonStyle">@style/ButtonTomato</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonTomato</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_holo_light</item>
+
+  </style>
+
+</resources>
