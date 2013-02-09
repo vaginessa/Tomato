@@ -1,14 +1,13 @@
 package com.shivgadhia.android.tomato.activities;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-import android.widget.Toast;
 
 import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.fragments.GridFragment;
@@ -20,14 +19,12 @@ public class TomatoActivity extends Activity {
 		
 		@Override
 		public boolean onQueryTextSubmit(String query) {
-			//Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
 			mGridFragment.searchWithCriteria(query);
 			return false;
 		}
 		
 		@Override
 		public boolean onQueryTextChange(String newText) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 	};
@@ -38,16 +35,20 @@ public class TomatoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+    }
+
+    private void initFragments() {
         FragmentManager fm = getFragmentManager();
-        
+
         mGridFragment = new GridFragment();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.fragment_content, mGridFragment);
         ft.commit();
- 
+
     }
 
-	@Override
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.actionbar_home, menu);
 		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
@@ -56,10 +57,20 @@ public class TomatoActivity extends Activity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initFragments();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+    }
 }
 
 
-
 /* attribution :
-ÒTomatoÓ symbol used on the app icon is by Alessandro Suraci, from thenounproject.com collection.
+ï¿½Tomatoï¿½ symbol used on the app icon is by Alessandro Suraci, from thenounproject.com collection.
 */

@@ -13,7 +13,7 @@ public class RESTLoaderFlickr extends RESTLoaderBase {
 	private static String API_KEY = "";
 	private static String SECRET = "";
 	
-	private static int LIMIT = 20;
+	private static int LIMIT = 50;
 	
 	private static String INTERESTINGNESS_FEED_URL = "http://api.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key="+API_KEY+"&per_page="+LIMIT+"&format=json";
 	private static String SEARCH_FEED_URL = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+API_KEY+"&per_page="+LIMIT+"&format=json&tags=";
@@ -54,7 +54,7 @@ public class RESTLoaderFlickr extends RESTLoaderBase {
 					mSecret = photoAttributes.getString("secret");
 					
 					// get url for image thumbnail. use _b for original size
-					urlStr = "http://farm"+mFarmID+".static.flickr.com/"+mServerID+"/"+mPhotoID+"_"+mSecret+"_s.jpg";
+					urlStr = "http://farm"+mFarmID+".static.flickr.com/"+mServerID+"/"+mPhotoID+"_"+mSecret+"_m.jpg";
 					title = photoAttributes.getString("title");
 					imgModels.add(new ImageModel(urlStr, title));
 				}
