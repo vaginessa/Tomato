@@ -16,7 +16,7 @@ public class DatabaseReader {
     /**
      * (1) Read - generic table support
      */
-    protected Cursor getAllFrom(String tableName) {
+    public Cursor getAllFrom(String tableName) {
         Uri uri = createUri(tableName);
         return contentResolver.query(uri, null, null, null, null);
     }

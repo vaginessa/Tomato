@@ -16,16 +16,28 @@
                 android:theme="@style/Tomato"
                 android:configChanges="orientation">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+            <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <service android:name=".service.GetPostsService" ></service>
+
+        <activity
+                android:name=".activities.PhotoViewPagerActivity"
+                android:label="PhotoView"
+                android:theme="@style/Tomato"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+        </activity>
+        <service android:name=".service.GetPostsService"></service>
         <provider
                 android:name=".persistance.TomatoProvider"
                 android:authorities="com.shivgadhia.android.tomato"
-                android:exported="false" />
+                android:exported="false"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>

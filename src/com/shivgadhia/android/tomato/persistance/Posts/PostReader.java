@@ -7,7 +7,6 @@ import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Tables;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PostReader {
     private final DatabaseReader databaseReader;
@@ -34,15 +33,16 @@ public class PostReader {
                 data.add(imageModel);
             } while (cursor.moveToNext());
         } else {
-            Log.e("PostReader","No data in the cursor.");
+            Log.e("PostReader", "No data in the cursor.");
         }
         return data;
     }
 
     private ImageModel getPost(Cursor cursor) {
         String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_ID));
-        String url = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_SMALL));
+        String urlSmall = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_SMALL));
+        String urlBig = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_LARGE));
 
-        return new ImageModel(url, name);
+        return new ImageModel(urlSmall, urlBig, name);
     }
 }

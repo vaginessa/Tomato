@@ -77,7 +77,7 @@ public class ImageGridAdapter extends BaseAdapter {
                 holder = (ViewHolder) view.getTag();
 
             }
-            String imageUrl = data.get(arg0).getUrl();
+            String imageUrl = data.get(arg0).getSmallUrl();
             ImageTag imgTag = imageTagFactory.build(imageUrl);
             holder.thumbnailImage.setTag(imgTag);
             holder.thumbnailTitle.setText(data.get(arg0).getTitle());

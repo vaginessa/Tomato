@@ -49,6 +49,8 @@
     </orderEntry>
     <orderEntry type="module" module-name="jumblr" exported="" />
     <orderEntry type="module" module-name="sqliteprovider-core" />
+    <orderEntry type="module" module-name="library" />
+    <orderEntry type="library" name="Maven: com.google.android:support-v4:r6" level="project" />
   </component>
 </module>
 
