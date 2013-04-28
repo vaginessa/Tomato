@@ -32,9 +32,9 @@ public class TomatoActivity extends Activity {
 			return false;
 		}
 	};
+    private GetPostsReceiver receiver;
 
-	
-	
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +43,7 @@ public class TomatoActivity extends Activity {
 
         IntentFilter filter = new IntentFilter(GetPostsReceiver.ACTION_RESP);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        GetPostsReceiver receiver = new GetPostsReceiver();
+        receiver = new GetPostsReceiver();
         registerReceiver(receiver, filter);
 
 
@@ -51,6 +51,12 @@ public class TomatoActivity extends Activity {
         msgIntent.putExtra(GetPostsService.PARAM_IN_MSG, "HELLO!!");
         startService(msgIntent);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     private void initFragments() {
