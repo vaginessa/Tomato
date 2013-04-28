@@ -48,7 +48,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="jumblr" exported="" />
-    <orderEntry type="module" module-name="sqliteprovider-core" exported="" />
+    <orderEntry type="module" module-name="sqliteprovider-core" />
   </component>
 </module>
 
