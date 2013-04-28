@@ -6,7 +6,6 @@ import com.shivgadhia.android.tomato.persistance.Tables;
 import com.tumblr.jumblr.types.Photo;
 import com.tumblr.jumblr.types.PhotoPost;
 import com.tumblr.jumblr.types.PhotoSize;
-import com.tumblr.jumblr.types.Post;
 
 import java.util.Arrays;
 
@@ -39,13 +38,13 @@ public class PostWriter {
 
     private String getSmallPhotoUrl(PhotoPost post) {
         Photo photo = post.getPhotos().get(0);
-        PhotoSize smallPhoto = photo.getSizes().get(0);
+        PhotoSize smallPhoto = photo.getSizes().get(photo.getSizes().size() - 1);
         return smallPhoto.getUrl();
     }
 
     private String getLargePhotoUrl(PhotoPost post) {
         Photo photo = post.getPhotos().get(0);
-        PhotoSize bigPhoto = photo.getSizes().get(photo.getSizes().size()-1);
+        PhotoSize bigPhoto = photo.getSizes().get(0);
         return bigPhoto.getUrl();
     }
 }

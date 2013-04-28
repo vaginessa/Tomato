@@ -43,7 +43,7 @@ public class GetPostsService extends IntentService {
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(GetPostsReceiver.ACTION_RESP);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(PARAM_OUT_MSG, blogUrl + " has " + blog.getPostCount() + " posts");
+        broadcastIntent.putExtra(PARAM_OUT_MSG, blog.getName() + " has " + blog.getPostCount() + " posts");
         sendBroadcast(broadcastIntent);
 
     }

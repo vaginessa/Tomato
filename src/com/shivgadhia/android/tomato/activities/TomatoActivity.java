@@ -23,7 +23,6 @@ public class TomatoActivity extends Activity {
 		
 		@Override
 		public boolean onQueryTextSubmit(String query) {
-			mGridFragment.searchWithCriteria(query);
 			return false;
 		}
 		

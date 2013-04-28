@@ -1,62 +1,42 @@
 package com.shivgadhia.android.tomato.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Loader;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import com.shivgadhia.android.tomato.ImageModel;
 import com.shivgadhia.android.tomato.R;
-import com.shivgadhia.android.tomato.RESTLoaderFlickr;
+import com.shivgadhia.android.tomato.loaders.PostLoader;
+import com.shivgadhia.android.tomato.persistance.DatabaseReader;
+import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
 
 import java.util.ArrayList;
 
 public class GridFragment extends Fragment implements LoaderCallbacks<ArrayList<ImageModel>> {
-    private static final String SAVED_SEARCH_CRITERIA = "saved_search_criteria";
     private ArrayList<ImageModel> mList = new ArrayList<ImageModel>();
     private GridView mGridView;
     private ImageGridAdapter mAdapter;
     private Context mContext;
-    private String mSearchCriteria;
-
-    public void searchWithCriteria(String criteria) {
-        mSearchCriteria = criteria;
-        Bundle searchterms = getBundle(mSearchCriteria);
-        Log.v("Search", criteria);
-        doSearch(searchterms);
-
-    }
-
-    private Bundle getBundle(String criteria) {
-
-        Bundle args = new Bundle();
-        args.putString("tags", criteria.replace(" ", "+"));
-
-        Bundle searchterms = new Bundle();
-        searchterms.putParcelable("searchterms", args);
-        return searchterms;
-    }
 
 
-    public void doSearch(Bundle searchterms) {
+    public void initLoader() {
         LoaderManager lm = getLoaderManager();
-        lm.destroyLoader(0);
-        lm.initLoader(0, searchterms, this);
+        lm.destroyLoader(PostLoader.LOADER_ID);
+        lm.initLoader(PostLoader.LOADER_ID, null, this);
     }
 
     @Override
     public void onResume() {
-        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
+        super.onResume();
         mAdapter = new ImageGridAdapter(mContext, null);
         mGridView.setAdapter(mAdapter);
+        initLoader();
 
     }
 
@@ -75,14 +55,8 @@ public class GridFragment extends Fragment implements LoaderCallbacks<ArrayList<
 
     @Override
     public Loader<ArrayList<ImageModel>> onCreateLoader(int id, Bundle args) {
-        if (args != null && args.containsKey("searchterms")) {
-            Bundle q = args.getParcelable("searchterms");
-
-            Log.v("Search", "q: " + q.getString("tags"));
-            return new RESTLoaderFlickr(mContext, q.getString("tags"));
-        } else {
-            return new RESTLoaderFlickr(mContext);
-        }
+        PostReader postReader = new PostReader(new DatabaseReader(getActivity().getContentResolver()));
+        return new PostLoader(getActivity(), postReader);
 
     }
 
