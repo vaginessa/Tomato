@@ -3,6 +3,8 @@ package com.shivgadhia.android.tomato.activities;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +13,8 @@ import android.widget.SearchView.OnQueryTextListener;
 
 import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.fragments.GridFragment;
+import com.shivgadhia.android.tomato.service.GetPostsReceiver;
+import com.shivgadhia.android.tomato.service.GetPostsService;
 
 public class TomatoActivity extends Activity {
 	private GridFragment mGridFragment;
@@ -35,6 +39,17 @@ public class TomatoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+
+        IntentFilter filter = new IntentFilter(GetPostsReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        GetPostsReceiver receiver = new GetPostsReceiver();
+        registerReceiver(receiver, filter);
+
+
+        Intent msgIntent = new Intent(this, GetPostsService.class);
+        msgIntent.putExtra(GetPostsService.PARAM_IN_MSG, "HELLO!!");
+        startService(msgIntent);
 
     }
 
