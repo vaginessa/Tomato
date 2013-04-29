@@ -3,9 +3,9 @@ package com.shivgadhia.android.tomato.fragments;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
-import android.content.Loader;
+import android.content.*;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,8 @@ import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
+import com.shivgadhia.android.tomato.service.GetPostsReceiver;
+import com.shivgadhia.android.tomato.service.GetPostsService;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,38 @@ public class GridFragment extends Fragment implements LoaderCallbacks<ArrayList<
     private GridView mGridView;
     private ImageGridAdapter mAdapter;
     private Context mContext;
+    private PostsFetchedReceiver receiver;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        IntentFilter filter = new IntentFilter(GetPostsReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new PostsFetchedReceiver();
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
+
+    private class PostsFetchedReceiver extends BroadcastReceiver {
+
+
+        public static final String ACTION_RESP =
+                "com.shivgadhia.android.tomato.POSTS_PROCESSED";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initLoader();
+        }
+    }
+
+
+
 
 
     public void initLoader() {

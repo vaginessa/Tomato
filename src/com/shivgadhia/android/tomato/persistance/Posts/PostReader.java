@@ -16,8 +16,7 @@ public class PostReader {
     }
 
     public ArrayList<ImageModel> getAll() {
-        Cursor cursor = databaseReader.getAllFrom(Tables.TBL_POSTS);
-
+        Cursor cursor = databaseReader.getAllAndSortBy(Tables.TBL_POSTS, Tables.Posts.COL_POST_DATE + " DESC");
         ArrayList<ImageModel> imageModels = populateListWith(cursor);
 
         cursor.close();

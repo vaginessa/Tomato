@@ -61,6 +61,16 @@ public class DatabaseReader {
         return contentResolver.query(uri, selection, null, null, null);
     }
 
+
+    /**
+     * SortBy
+     */
+    public Cursor getAllAndSortBy(String tableName, String sortBy) {
+        Uri uri = createUri(tableName);
+        return contentResolver.query(uri, null, null, null, sortBy);
+    }
+
+
     private Uri createUri(String path) {
         return Uri.parse(TomatoProvider.AUTHORITY + path);
     }

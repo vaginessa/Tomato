@@ -16,6 +16,7 @@ public final class Tables {
         public static final String COL_PHOTO_CAPTION = "post_photo_caption";
         public static final String COL_PHOTO_IMAGE_SMALL = "post_photo_image_small";
         public static final String COL_PHOTO_IMAGE_LARGE = "post_photo_image_large";
+        public static final String _ID = "_id";
     }
 
 }
