@@ -21,16 +21,15 @@ import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreeImagePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<ImageModel>> {
+public class TwoImagePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<ImageModel>> {
     ImageTagFactory imageTagFactory;
     private int pos;
     private ImageView one;
     private ImageView two;
-    private ImageView three;
 
-    private static final int[] LAYOUTS = new int[]{R.layout.page_three_images_alt, R.layout.page_three_images, R.layout.page_three_images_alt2};
+    private static final int[] LAYOUTS = new int[]{R.layout.page_two_images};
 
-    public ThreeImagePageFragment() {
+    public TwoImagePageFragment() {
     }
 
     public void initLoader() {
@@ -50,7 +49,6 @@ public class ThreeImagePageFragment extends Fragment implements LoaderManager.Lo
         View v = inflater.inflate(getLayout(), container, false);
         one = (ImageView) v.findViewById(R.id.page_three_images_1);
         two = (ImageView) v.findViewById(R.id.page_three_images_2);
-        three = (ImageView) v.findViewById(R.id.page_three_images_3);
         initLoader();
         return v;
     }
@@ -61,7 +59,7 @@ public class ThreeImagePageFragment extends Fragment implements LoaderManager.Lo
     }
 
     public static Fragment newInstance(int pos) {
-        ThreeImagePageFragment threeImagePageFragment = new ThreeImagePageFragment();
+        TwoImagePageFragment threeImagePageFragment = new TwoImagePageFragment();
         threeImagePageFragment.setPosition(pos);
 
         return threeImagePageFragment;
@@ -75,9 +73,6 @@ public class ThreeImagePageFragment extends Fragment implements LoaderManager.Lo
 
         int pos_two = (pos * 3) + 1;
         setImage(images, two, pos_two);
-
-        int pos_three = (pos * 3) + 2;
-        setImage(images, three, pos_three);
     }
 
     private void setImage(List<ImageModel> images, ImageView imageView, int pos_one) {

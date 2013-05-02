@@ -8,14 +8,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import com.shivgadhia.android.tomato.ImageModel;
+import com.shivgadhia.android.tomato.fragments.OneImagePageFragment;
 import com.shivgadhia.android.tomato.fragments.ThreeImagePageFragment;
+import com.shivgadhia.android.tomato.fragments.TwoImagePageFragment;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
 import uk.co.senab.photoview.sample.HackyViewPager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PagesActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<ArrayList<ImageModel>> {
 
@@ -25,13 +26,21 @@ public class PagesActivity extends FragmentActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupActionbar();
+
         mViewPager = new HackyViewPager(this);
-        mViewPager.setId( 0x7F04FFF0 );
+        mViewPager.setId(0x7F04FFF0);
+        mViewPager.setOffscreenPageLimit(1);
 
         setContentView(mViewPager);
         initLoader();
     }
 
+    private void setupActionbar() {
+        getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
+        getActionBar().setDisplayShowTitleEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(false);
+    }
 
     public void initLoader() {
         LoaderManager lm = getLoaderManager();
@@ -66,7 +75,16 @@ public class PagesActivity extends FragmentActivity implements LoaderManager.Loa
 
         @Override
         public Fragment getItem(int position) {
-            return ThreeImagePageFragment.newInstance(position);
+            int index = (int) (Math.random() * 3);
+            switch (index) {
+                default:
+                case 0:
+                    return ThreeImagePageFragment.newInstance(position);
+                case 1:
+                    return OneImagePageFragment.newInstance(position);
+                case 2:
+                    return TwoImagePageFragment.newInstance(position);
+            }
         }
 
         @Override
