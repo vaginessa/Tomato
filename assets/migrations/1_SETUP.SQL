@@ -1,1 +1,3 @@
 CREATE TABLE 'POSTS'(_id INTEGER PRIMARY KEY AUTOINCREMENT,blog_name TEXT,id TEXT UNIQUE,post_url TEXT UNIQUE,type TEXT,post_time TEXT,post_date TEXT,tags TEXT,source_url TEXT,source_title TEXT,post_photo_caption TEXT,post_photo_image_small TEXT,post_photo_image_large TEXT);
+
+CREATE VIEW 'BLOGS' AS SELECT DISTINCT blog_name FROM POSTS

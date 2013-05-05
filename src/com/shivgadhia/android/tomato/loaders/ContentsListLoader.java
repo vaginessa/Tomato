@@ -3,34 +3,34 @@ package com.shivgadhia.android.tomato.loaders;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.util.Log;
-import com.shivgadhia.android.tomato.models.ImageModel;
-import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
+import com.shivgadhia.android.tomato.models.ContentsListItem;
+import com.shivgadhia.android.tomato.persistance.Blogs.BlogsReader;
 
 import java.util.ArrayList;
 
-public class PostLoader extends AsyncTaskLoader<ArrayList<ImageModel>> {
-    ArrayList<ImageModel> mImageModels;
+public class ContentsListLoader extends AsyncTaskLoader<ArrayList<ContentsListItem>> {
+    ArrayList<ContentsListItem> blogs;
     public static final int LOADER_ID = 123;
 
-    private final PostReader postReader;
+    private final BlogsReader blogsReader;
 
-    public PostLoader(Context context, PostReader postReader) {
+    public ContentsListLoader(Context context, BlogsReader reader) {
         super(context);
-        this.postReader = postReader;
+        this.blogsReader = reader;
     }
 
     @Override
-    public ArrayList<ImageModel> loadInBackground() {
+    public ArrayList<ContentsListItem> loadInBackground() {
 
 
-        return postReader.getAll();
+        return blogsReader.getAll();
     }
 
 
     @Override
-    public void deliverResult(ArrayList<ImageModel> data) {
+    public void deliverResult(ArrayList<ContentsListItem> data) {
         // Here we cache our response.
-        mImageModels = data;
+        blogs = data;
         Log.v("Debug", "deliver result");
         super.deliverResult(data);
     }
@@ -38,8 +38,8 @@ public class PostLoader extends AsyncTaskLoader<ArrayList<ImageModel>> {
     @Override
     protected void onStartLoading() {
         // use cached result - and call deliverResult(), or forceLoad()
-        if (mImageModels != null && mImageModels.size() > 0) {
-            super.deliverResult(mImageModels);
+        if (blogs != null && blogs.size() > 0) {
+            super.deliverResult(blogs);
             return;
         }
 
@@ -59,7 +59,7 @@ public class PostLoader extends AsyncTaskLoader<ArrayList<ImageModel>> {
         onStopLoading();
 
         // Get rid of our cache if it exists.
-        mImageModels = null;
+        blogs = null;
     }
 
 }

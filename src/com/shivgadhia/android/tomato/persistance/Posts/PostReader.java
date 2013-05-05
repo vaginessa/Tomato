@@ -2,7 +2,7 @@ package com.shivgadhia.android.tomato.persistance.Posts;
 
 import android.database.Cursor;
 import android.util.Log;
-import com.shivgadhia.android.tomato.ImageModel;
+import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Tables;
 

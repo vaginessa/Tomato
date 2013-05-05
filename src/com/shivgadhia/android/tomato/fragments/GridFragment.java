@@ -5,18 +5,16 @@ import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.*;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import com.shivgadhia.android.tomato.ImageModel;
 import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
+import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
 import com.shivgadhia.android.tomato.service.GetPostsReceiver;
-import com.shivgadhia.android.tomato.service.GetPostsService;
 
 import java.util.ArrayList;
 
@@ -54,9 +52,6 @@ public class GridFragment extends Fragment implements LoaderCallbacks<ArrayList<
             initLoader();
         }
     }
-
-
-
 
 
     public void initLoader() {

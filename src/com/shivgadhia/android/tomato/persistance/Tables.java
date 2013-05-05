@@ -3,6 +3,7 @@ package com.shivgadhia.android.tomato.persistance;
 public final class Tables {
 
     public static final String TBL_POSTS = "POSTS";
+    public static final String VIEW_BLOGS = "BLOGS";
 
     public static class Posts {
         public static final String COL_BLOG_NAME = "blog_name";
@@ -17,6 +18,9 @@ public final class Tables {
         public static final String COL_PHOTO_IMAGE_SMALL = "post_photo_image_small";
         public static final String COL_PHOTO_IMAGE_LARGE = "post_photo_image_large";
         public static final String _ID = "_id";
+    }
+
+    public static class Blogs extends Posts {
     }
 
 }

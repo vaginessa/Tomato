@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import com.shivgadhia.android.tomato.ImageModel;
+import android.support.v4.app.FragmentPagerAdapter;
 import com.shivgadhia.android.tomato.fragments.OneImagePageFragment;
 import com.shivgadhia.android.tomato.fragments.ThreeImagePageFragment;
+import com.shivgadhia.android.tomato.fragments.TitlePageFragment;
 import com.shivgadhia.android.tomato.fragments.TwoImagePageFragment;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
+import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
 import uk.co.senab.photoview.sample.HackyViewPager;
@@ -56,7 +57,7 @@ public class PagesActivity extends FragmentActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<ArrayList<ImageModel>> loader, ArrayList<ImageModel> data) {
-        SamplePagerAdapter samplePagerAdapter = new SamplePagerAdapter(getSupportFragmentManager(), data.size());
+        SamplePagerAdapter samplePagerAdapter = new SamplePagerAdapter(getSupportFragmentManager(), data);
         mViewPager.setAdapter(samplePagerAdapter);
     }
 
@@ -64,32 +65,57 @@ public class PagesActivity extends FragmentActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<ArrayList<ImageModel>> loader) {
     }
 
-    private class SamplePagerAdapter extends FragmentStatePagerAdapter {
+    private class SamplePagerAdapter extends FragmentPagerAdapter {
 
-        private int size;
+        private int accumulatedCount = 0;
+        private final ArrayList<ImageModel> images;
 
-        public SamplePagerAdapter(FragmentManager fm, int size) {
+        public SamplePagerAdapter(FragmentManager fm, ArrayList<ImageModel> images) {
             super(fm);
-            this.size = size;
+            this.images = images;
         }
 
         @Override
         public Fragment getItem(int position) {
-            int index = (int) (Math.random() * 3);
-            switch (index) {
-                default:
-                case 0:
-                    return ThreeImagePageFragment.newInstance(position);
-                case 1:
-                    return OneImagePageFragment.newInstance(position);
-                case 2:
-                    return TwoImagePageFragment.newInstance(position);
+            if (position == 0) {
+                return new TitlePageFragment();
+            } else {
+
+                return getRandomPageLayout(position);
+            }
+        }
+
+        private Fragment getRandomPageLayout(int position) {
+            try {
+                int index = (int) (Math.random() * 3);
+                switch (index) {
+                    default:
+                    case 0:
+                        ThreeImagePageFragment fragment = (ThreeImagePageFragment) ThreeImagePageFragment.newInstance(position);
+                        fragment.setImages(images.subList(accumulatedCount, accumulatedCount + 3));
+                        accumulatedCount = accumulatedCount + 3;
+                        return fragment;
+                    case 1:
+                        TwoImagePageFragment fragment1 = (TwoImagePageFragment) TwoImagePageFragment.newInstance(position);
+                        fragment1.setImages(images.subList(accumulatedCount, accumulatedCount + 2));
+                        accumulatedCount = accumulatedCount + 2;
+                        return fragment1;
+                    case 2:
+                        OneImagePageFragment fragment2 = (OneImagePageFragment) OneImagePageFragment.newInstance(position);
+                        fragment2.setImages(images.subList(accumulatedCount, accumulatedCount + 1));
+                        accumulatedCount = accumulatedCount + 1;
+                        return fragment2;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                OneImagePageFragment dummy = (OneImagePageFragment) OneImagePageFragment.newInstance(position);
+                dummy.setImages(new ArrayList<ImageModel>());
+                return dummy;
             }
         }
 
         @Override
         public int getCount() {
-            return (int) Math.ceil(size / 3);
+            return images.size();
         }
     }
 }

@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.novoda.imageloader.core.model.ImageTag;
 import com.novoda.imageloader.core.model.ImageTagFactory;
-import com.shivgadhia.android.tomato.ImageModel;
 import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.TomatoApplication;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
+import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
 import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.sample.*;
+import uk.co.senab.photoview.sample.HackyViewPager;
 
 import java.util.ArrayList;
 
@@ -33,8 +33,8 @@ public class PhotoViewPagerActivity extends Activity implements LoaderManager.Lo
         setContentView(mViewPager);
         imageTagFactory = new ImageTagFactory(this, R.drawable.ic_launcher);
         ArrayList<ImageModel> imageModels = new ArrayList<ImageModel>();
-        imageModels.add(new ImageModel("http://24.media.tumblr.com/tumblr_m98uytdr3Z1rxiqm6o1_1280.jpg","http://25.media.tumblr.com/e7ad7269fdda256c800a21b4e4839601/tumblr_ml7jr4UbeX1qflpkjo1_1280.jpg", "title"));
-        imageModels.add(new ImageModel("http://25.media.tumblr.com/e7ad7269fdda256c800a21b4e4839601/tumblr_ml7jr4UbeX1qflpkjo1_1280.jpg","http://25.media.tumblr.com/e7ad7269fdda256c800a21b4e4839601/tumblr_ml7jr4UbeX1qflpkjo1_1280.jpg", "title"));
+        imageModels.add(new ImageModel("http://24.media.tumblr.com/tumblr_m98uytdr3Z1rxiqm6o1_1280.jpg", "http://25.media.tumblr.com/e7ad7269fdda256c800a21b4e4839601/tumblr_ml7jr4UbeX1qflpkjo1_1280.jpg", "title"));
+        imageModels.add(new ImageModel("http://25.media.tumblr.com/e7ad7269fdda256c800a21b4e4839601/tumblr_ml7jr4UbeX1qflpkjo1_1280.jpg", "http://25.media.tumblr.com/e7ad7269fdda256c800a21b4e4839601/tumblr_ml7jr4UbeX1qflpkjo1_1280.jpg", "title"));
         imageModels.add(new ImageModel("http://25.media.tumblr.com/tumblr_m6hpirkbhE1r674r7o1_500.jpg", "http://25.media.tumblr.com/tumblr_m6hpirkbhE1r674r7o1_500.jpg", "title"));
         initLoader();
     }
