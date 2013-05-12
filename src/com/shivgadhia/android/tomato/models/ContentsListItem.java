@@ -15,4 +15,8 @@ public class ContentsListItem {
     public String toString() {
         return title;
     }
+
+    public String asUrl() {
+        return title + ".tumblr.com";
+    }
 }

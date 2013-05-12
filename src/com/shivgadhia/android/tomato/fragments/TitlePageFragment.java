@@ -1,12 +1,13 @@
 package com.shivgadhia.android.tomato.fragments;
 
 import android.app.LoaderManager;
-import android.content.Loader;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.shivgadhia.android.tomato.R;
@@ -15,12 +16,25 @@ import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.models.ContentsListItem;
 import com.shivgadhia.android.tomato.persistance.Blogs.BlogsReader;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
+import com.shivgadhia.android.tomato.service.GetPostsReceiver;
+import com.shivgadhia.android.tomato.service.GetPostsService;
 
 import java.util.ArrayList;
 
 public class TitlePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<ContentsListItem>> {
 
     private ListView contentsList;
+    private ArrayList<ContentsListItem> data;
+    private PostsFetchedReceiver receiver;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        receiver = new PostsFetchedReceiver();
+        IntentFilter filter = new IntentFilter(GetPostsReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        getActivity().registerReceiver(receiver, filter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,14 +57,50 @@ public class TitlePageFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<ArrayList<ContentsListItem>> loader, ArrayList<ContentsListItem> data) {
+        this.data = data;
         ArrayAdapter<ContentsListItem> adapter = new ArrayAdapter<ContentsListItem>(getActivity(),
                 android.R.layout.simple_list_item_1, data);
         contentsList.setAdapter(adapter);
+        contentsList.setOnItemClickListener(onBlogTitleClicked);
 
     }
+
+    private AdapterView.OnItemClickListener onBlogTitleClicked = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String url = data.get(position).asUrl();
+            fetchPosts(url);
+        }
+    };
+
+    private void fetchPosts(String url) {
+        Intent msgIntent = new Intent(getActivity(), GetPostsService.class);
+        msgIntent.putExtra(GetPostsService.PARAM_IN_POST_URL, url);
+        getActivity().startService(msgIntent);
+    }
+
 
     @Override
     public void onLoaderReset(Loader<ArrayList<ContentsListItem>> loader) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
+
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
+    private class PostsFetchedReceiver extends BroadcastReceiver {
+
+
+        public static final String ACTION_RESP =
+                "com.shivgadhia.android.tomato.POSTS_PROCESSED";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initLoader();
+        }
+    }
+
 }
