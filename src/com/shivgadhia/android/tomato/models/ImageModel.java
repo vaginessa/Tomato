@@ -5,12 +5,14 @@ public class ImageModel {
     private String small_image_url;
     private String big_image_url;
     private String mTitle;
+    private String post_id;
 
-    public ImageModel(String url_small, String url_big, String title) {
+    public ImageModel(String url_small, String url_big, String title, String post_id) {
         super();
         this.small_image_url = url_small;
         this.big_image_url = url_big;
         this.mTitle = title;
+        this.post_id = post_id;
     }
 
     public String getSmallUrl() {
@@ -23,5 +25,9 @@ public class ImageModel {
 
     public String getBigUrl() {
         return big_image_url;
+    }
+
+    public String getPostId() {
+        return post_id;
     }
 }

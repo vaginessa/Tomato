@@ -9,19 +9,23 @@ import com.shivgadhia.android.tomato.persistance.Tables;
 import java.util.ArrayList;
 
 public class PostReader {
-    private final DatabaseReader databaseReader;
+    protected final DatabaseReader databaseReader;
 
     public PostReader(DatabaseReader databaseReader) {
         this.databaseReader = databaseReader;
     }
 
     public ArrayList<ImageModel> getAll() {
-        Cursor cursor = databaseReader.getAllAndSortBy(Tables.TBL_POSTS, Tables.Posts.COL_POST_DATE + " DESC");
+        Cursor cursor = getCursor();
         ArrayList<ImageModel> imageModels = populateListWith(cursor);
 
         cursor.close();
 
         return imageModels;
+    }
+
+    protected Cursor getCursor() {
+        return databaseReader.getAllAndSortBy(Tables.TBL_POSTS, Tables.Posts.COL_POST_DATE + " DESC");
     }
 
     private ArrayList<ImageModel> populateListWith(Cursor cursor) {
@@ -41,7 +45,6 @@ public class PostReader {
         String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_ID));
         String urlSmall = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_SMALL));
         String urlBig = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_LARGE));
-
-        return new ImageModel(urlSmall, urlBig, name);
+        return new ImageModel(urlSmall, urlBig, name, name);
     }
 }

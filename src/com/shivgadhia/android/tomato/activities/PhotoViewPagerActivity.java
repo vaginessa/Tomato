@@ -15,7 +15,7 @@ import com.shivgadhia.android.tomato.TomatoApplication;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
-import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
+import com.shivgadhia.android.tomato.persistance.Posts.SinglePostReader;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.sample.HackyViewPager;
 
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class PhotoViewPagerActivity extends Activity implements LoaderManager.LoaderCallbacks<ArrayList<ImageModel>> {
 
+    public static final String EXTRA_POST_ID = "extraPostId";
     ImageTagFactory imageTagFactory;
     private HackyViewPager mViewPager;
 
@@ -32,6 +33,9 @@ public class PhotoViewPagerActivity extends Activity implements LoaderManager.Lo
         mViewPager = new HackyViewPager(this);
         setContentView(mViewPager);
         imageTagFactory = new ImageTagFactory(this, R.drawable.ic_launcher);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         initLoader();
     }
 
@@ -44,8 +48,12 @@ public class PhotoViewPagerActivity extends Activity implements LoaderManager.Lo
 
     @Override
     public Loader<ArrayList<ImageModel>> onCreateLoader(int id, Bundle args) {
-        PostReader postReader = new PostReader(new DatabaseReader(getContentResolver()));
+        SinglePostReader postReader = new SinglePostReader(new DatabaseReader(getContentResolver()), getPostId());
         return new PostLoader(this, postReader);
+    }
+
+    private String getPostId() {
+        return getIntent().getStringExtra(EXTRA_POST_ID);
     }
 
     @Override

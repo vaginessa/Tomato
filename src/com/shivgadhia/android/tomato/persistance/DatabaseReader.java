@@ -21,6 +21,12 @@ public class DatabaseReader {
         return contentResolver.query(uri, null, null, null, null);
     }
 
+    public Cursor getAllFrom(String tableName, String selection, String[] selectionArgs) {
+        Uri uri = createUri(tableName);
+        return contentResolver.query(uri, null, selection, selectionArgs, null);
+    }
+
+
     /**
      * (2) Read - primary key support
      */
@@ -41,7 +47,7 @@ public class DatabaseReader {
      * (4) Read - group by & having support
      */
     public Cursor getGroupedByAndHaving(String tableName, String column, String having, String[] selection) {
-        Uri uri = createUri(tableName + "?groupBy=" +column + "&having=" + having);
+        Uri uri = createUri(tableName + "?groupBy=" + column + "&having=" + having);
         return contentResolver.query(uri, selection, null, null, null);
     }
 
@@ -50,7 +56,7 @@ public class DatabaseReader {
      */
     public Cursor getLimited(String tableName, int limit) {
         Uri uri = createUri(tableName + "?limit=" + limit);
-        return contentResolver.query(uri,  null, null, null, null);
+        return contentResolver.query(uri, null, null, null, null);
     }
 
     /**
