@@ -26,11 +26,8 @@ public class ThreeImagePageFragment extends PageLayoutFragment {
         one = (ImageView) v.findViewById(R.id.page_three_images_1);
         two = (ImageView) v.findViewById(R.id.page_three_images_2);
         three = (ImageView) v.findViewById(R.id.page_three_images_3);
-
         setImage(one, images.get(0));
-
         setImage(two, images.get(1));
-
         setImage(three, images.get(2));
         return v;
     }
@@ -44,8 +41,7 @@ public class ThreeImagePageFragment extends PageLayoutFragment {
 
 
     protected int getLayout() {
-        int index = (int) (Math.random() * LAYOUTS.length);
-        return LAYOUTS[index];
+        return LAYOUTS[position % LAYOUTS.length];
     }
 
     @Override

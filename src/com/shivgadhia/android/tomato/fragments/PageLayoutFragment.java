@@ -1,6 +1,7 @@
 package com.shivgadhia.android.tomato.fragments;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,9 +16,15 @@ import java.util.List;
 public abstract class PageLayoutFragment extends Fragment {
     protected List<ImageModel> images;
     ImageTagFactory imageTagFactory;
-    private int pos;
+    protected int position;
 
     protected abstract int getLayout();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     public void setImages(List<ImageModel> images) {
         this.images = images;
@@ -48,6 +55,6 @@ public abstract class PageLayoutFragment extends Fragment {
     }
 
     protected void setPosition(int pos) {
-        this.pos = pos;
+        this.position = pos;
     }
 }
