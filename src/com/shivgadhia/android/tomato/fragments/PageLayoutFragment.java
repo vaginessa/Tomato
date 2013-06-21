@@ -25,14 +25,14 @@ public abstract class PageLayoutFragment extends Fragment {
 
     protected void setImage(ImageView imageView, ImageModel imageModel) {
         try {
-            ImageTag tag = imageTagFactory.build(imageModel.getBigUrl());
+            ImageTag tag = imageTagFactory.build(imageModel.getSmallUrl());
             imageView.setTag(tag);
             TomatoApplication.getImageManager().getLoader().load(imageView);
 
             imageView.setOnClickListener(createClickListener(imageModel.getPostId()));
 
         } catch (IndexOutOfBoundsException e) {
-
+            e.printStackTrace();
         }
     }
 

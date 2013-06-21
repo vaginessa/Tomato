@@ -1,10 +1,15 @@
 package com.shivgadhia.android.tomato.persistance.Posts;
 
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Tables;
+import com.shivgadhia.android.tomato.persistance.TomatoProvider;
 
 import java.util.ArrayList;
 
@@ -28,7 +33,7 @@ public class PostReader {
         return databaseReader.getAllAndSortBy(Tables.TBL_POSTS, Tables.Posts.COL_POST_DATE + " DESC");
     }
 
-    private ArrayList<ImageModel> populateListWith(Cursor cursor) {
+    public ArrayList<ImageModel> populateListWith(Cursor cursor) {
         ArrayList<ImageModel> data = new ArrayList<ImageModel>();
         if (cursor.moveToFirst()) {
             do {
@@ -42,9 +47,14 @@ public class PostReader {
     }
 
     private ImageModel getPost(Cursor cursor) {
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_ID));
-        String urlSmall = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_SMALL));
-        String urlBig = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_LARGE));
-        return new ImageModel(urlSmall, urlBig, name, name);
+        String url_small = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_SMALL));
+        String url_big = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_LARGE));
+        String title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_BLOG_NAME));
+        String post_id = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts._ID));
+        return new ImageModel(url_small, url_big, title, post_id);
+    }
+
+    public Loader<Cursor> getAll(Context context) {
+        return new CursorLoader(context, Uri.parse(TomatoProvider.AUTHORITY + Tables.TBL_POSTS), null, null, new String[]{}, Tables.Posts.COL_POST_DATE + " DESC");
     }
 }

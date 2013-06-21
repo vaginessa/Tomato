@@ -29,21 +29,28 @@ public class PostWriter {
         values.put(Tables.Posts.COL_SOURCE_URL, post.getSourceUrl());
 
         values.put(Tables.Posts.COL_PHOTO_CAPTION, post.getCaption());
-        values.put(Tables.Posts.COL_PHOTO_IMAGE_SMALL, getSmallPhotoUrl(post));
-        values.put(Tables.Posts.COL_PHOTO_IMAGE_LARGE, getLargePhotoUrl(post));
 
-        databaseWriter.saveDataToPostsTable(values);
+        for (int i = 0; i < post.getPhotos().size(); i++) {
+            values.put(Tables.Posts.COL_PHOTO_IMAGE_SMALL, getSmallPhotoUrl(post, i));
+            values.put(Tables.Posts.COL_PHOTO_IMAGE_LARGE, getLargePhotoUrl(post, i));
+
+            databaseWriter.saveDataToPostsTable(values);
+        }
 
     }
 
-    private String getSmallPhotoUrl(PhotoPost post) {
-        Photo photo = post.getPhotos().get(0);
-        PhotoSize smallPhoto = photo.getSizes().get(photo.getSizes().size() - 1);
+    private String getSmallPhotoUrl(PhotoPost post, int i) {
+        Photo photo = post.getPhotos().get(i);
+        PhotoSize smallPhoto = photo.getSizes().get(halfwayIndexOf(photo.getSizes().size()));
         return smallPhoto.getUrl();
     }
 
-    private String getLargePhotoUrl(PhotoPost post) {
-        Photo photo = post.getPhotos().get(0);
+    private int halfwayIndexOf(int photoSizes) {
+        return Math.abs(Math.round(photoSizes / 2) - 1);
+    }
+
+    private String getLargePhotoUrl(PhotoPost post, int i) {
+        Photo photo = post.getPhotos().get(i);
         PhotoSize bigPhoto = photo.getSizes().get(0);
         return bigPhoto.getUrl();
     }

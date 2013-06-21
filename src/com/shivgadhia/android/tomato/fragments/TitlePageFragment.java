@@ -1,18 +1,19 @@
 package com.shivgadhia.android.tomato.fragments;
 
 import android.app.LoaderManager;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.*;
 import com.shivgadhia.android.tomato.R;
-import com.shivgadhia.android.tomato.loaders.ContentsListLoader;
-import com.shivgadhia.android.tomato.loaders.PostLoader;
+import com.shivgadhia.android.tomato.activities.PagesActivity;
+import com.shivgadhia.android.tomato.loaders.BlogsLoader;
 import com.shivgadhia.android.tomato.models.ContentsListItem;
 import com.shivgadhia.android.tomato.persistance.Blogs.BlogsReader;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
@@ -21,11 +22,13 @@ import com.shivgadhia.android.tomato.service.GetPostsService;
 
 import java.util.ArrayList;
 
-public class TitlePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<ContentsListItem>> {
+public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdatedListener {
 
     private ListView contentsList;
     private ArrayList<ContentsListItem> data;
     private PostsFetchedReceiver receiver;
+    private EditText blogNameInput;
+    private ImageButton blogNameSearch;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -40,36 +43,49 @@ public class TitlePageFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.page_title_contents, container, false);
         contentsList = (ListView) v.findViewById(R.id.page_title_contents_list);
+        blogNameInput = (EditText) v.findViewById(R.id.add_blog_input);
+        blogNameSearch = (ImageButton) v.findViewById(R.id.add_blog_submit);
+
+        blogNameSearch.setOnClickListener(blogNameSearchListener);
+
         initLoader();
         return v;
     }
 
+    private View.OnClickListener blogNameSearchListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String inputUrl = blogNameInput.getText().toString();
+            fetchPosts(inputUrl);
+        }
+    };
+
     public void initLoader() {
         LoaderManager lm = getActivity().getLoaderManager();
-        lm.destroyLoader(PostLoader.LOADER_ID);
-        lm.initLoader(PostLoader.LOADER_ID, null, this);
+        BlogsLoader loader = new BlogsLoader(getActivity(), lm, new BlogsReader(new DatabaseReader(getActivity().getContentResolver())), this);
+        loader.initLoader();
     }
 
     @Override
-    public Loader<ArrayList<ContentsListItem>> onCreateLoader(int id, Bundle args) {
-        return new ContentsListLoader(getActivity(), new BlogsReader(new DatabaseReader(getActivity().getContentResolver())));
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ArrayList<ContentsListItem>> loader, ArrayList<ContentsListItem> data) {
-        this.data = data;
+    public void dataUpdated(ArrayList<ContentsListItem> list) {
+        this.data = list;
         ArrayAdapter<ContentsListItem> adapter = new ArrayAdapter<ContentsListItem>(getActivity(),
                 android.R.layout.simple_list_item_1, data);
         contentsList.setAdapter(adapter);
         contentsList.setOnItemClickListener(onBlogTitleClicked);
-
     }
+
 
     private AdapterView.OnItemClickListener onBlogTitleClicked = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String url = data.get(position).asUrl();
             fetchPosts(url);
+
+            String blogName = data.get(position).getTitle();
+            Intent showPosts = new Intent(getActivity(), PagesActivity.class);
+            showPosts.putExtra(PagesActivity.EXTRA_BLOG_NAME, blogName);
+            startActivity(showPosts);
         }
     };
 
@@ -78,12 +94,6 @@ public class TitlePageFragment extends Fragment implements LoaderManager.LoaderC
         msgIntent.putExtra(GetPostsService.PARAM_IN_POST_URL, url);
         getActivity().startService(msgIntent);
     }
-
-
-    @Override
-    public void onLoaderReset(Loader<ArrayList<ContentsListItem>> loader) {
-    }
-
 
     @Override
     public void onDestroy() {

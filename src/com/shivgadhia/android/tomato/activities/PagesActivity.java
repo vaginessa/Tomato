@@ -1,66 +1,74 @@
 package com.shivgadhia.android.tomato.activities;
 
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import com.shivgadhia.android.tomato.fragments.ThreeImagePageFragment;
-import com.shivgadhia.android.tomato.fragments.TitlePageFragment;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
-import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
+import com.shivgadhia.android.tomato.persistance.Posts.PostReaderForBlog;
 import uk.co.senab.photoview.sample.HackyViewPager;
 
 import java.util.ArrayList;
 
-public class PagesActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<ArrayList<ImageModel>> {
+public class PagesActivity extends FragmentActivity implements PostLoader.DataUpdatedListener {
 
+    public static final String EXTRA_BLOG_NAME = "extraBlogName";
     private HackyViewPager mViewPager;
+    private PostLoader postLoader;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionbar();
 
         mViewPager = new HackyViewPager(this);
         mViewPager.setId(0x7F04FFF0);
         mViewPager.setOffscreenPageLimit(1);
 
         setContentView(mViewPager);
-        initLoader();
+
+        State state = new State(savedInstanceState);
+        String blogName = state.getBlogName();
+
+        if (blogName.isEmpty()) {
+            blogName = getBlogName();
+        }
+
+        setupActionbar(blogName);
+        initLoader(blogName);
     }
 
-    private void setupActionbar() {
+    private void initLoader(String blogName) {
+        postLoader = new PostLoader(this, getLoaderManager(), new PostReaderForBlog(new DatabaseReader(getContentResolver()), blogName), this);
+        postLoader.initLoader();
+    }
+
+    private void setupActionbar(String title) {
         getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
         getActionBar().setDisplayShowTitleEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
+        getActionBar().setTitle(title);
     }
 
-    public void initLoader() {
-        LoaderManager lm = getLoaderManager();
-        lm.destroyLoader(PostLoader.LOADER_ID);
-        lm.initLoader(PostLoader.LOADER_ID, null, this);
-    }
-
-    @Override
-    public Loader<ArrayList<ImageModel>> onCreateLoader(int id, Bundle args) {
-        PostReader postReader = new PostReader(new DatabaseReader(getContentResolver()));
-        return new PostLoader(this, postReader);
+    private String getBlogName() {
+        return getIntent().getStringExtra(EXTRA_BLOG_NAME);
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<ImageModel>> loader, ArrayList<ImageModel> data) {
-        SamplePagerAdapter samplePagerAdapter = new SamplePagerAdapter(getSupportFragmentManager(), data);
+    public void dataUpdated(ArrayList<ImageModel> list) {
+        SamplePagerAdapter samplePagerAdapter = new SamplePagerAdapter(getSupportFragmentManager(), list);
         mViewPager.setAdapter(samplePagerAdapter);
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<ImageModel>> loader) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        new State(outState).saveBlogName(getBlogName());
+
     }
 
     private class SamplePagerAdapter extends FragmentPagerAdapter {
@@ -75,16 +83,11 @@ public class PagesActivity extends FragmentActivity implements LoaderManager.Loa
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
-                return new TitlePageFragment();
-            } else {
-
-                return getPage(position);
-            }
+            return getPage(position);
         }
 
         private Fragment getPage(int position) {
-            int startPos = (position - 1) * 3;
+            int startPos = (position) * 3;
             ThreeImagePageFragment fragment = (ThreeImagePageFragment) ThreeImagePageFragment.newInstance(position);
             fragment.setImages(images.subList(startPos, startPos + 3));
             return fragment;
@@ -94,6 +97,31 @@ public class PagesActivity extends FragmentActivity implements LoaderManager.Loa
         @Override
         public int getCount() {
             return images.size() / 3;
+        }
+    }
+
+
+    private static class State {
+        private static final String STATE_BLOG_NAME = "blogName";
+        private Bundle outstate;
+
+        State(Bundle outstate) {
+            this.outstate = outstate;
+        }
+
+        private Bundle getOutstate() {
+            return outstate;
+        }
+
+        public void saveBlogName(String blogname) {
+            outstate.putString(STATE_BLOG_NAME, blogname);
+        }
+
+        public String getBlogName() {
+            if (outstate != null) {
+                return outstate.getString(STATE_BLOG_NAME);
+            }
+            return "";
         }
     }
 }

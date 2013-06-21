@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import com.shivgadhia.android.tomato.R;
+import com.shivgadhia.android.tomato.loaders.PostAsyncTaskLoader;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
@@ -84,8 +85,8 @@ public class GridFragment extends Fragment implements LoaderCallbacks<ArrayList<
 
     @Override
     public Loader<ArrayList<ImageModel>> onCreateLoader(int id, Bundle args) {
-        PostReader postReader = new PostReader(new DatabaseReader(getActivity().getContentResolver()));
-        return new PostLoader(getActivity(), postReader);
+        PostReader blogsReader = new PostReader(new DatabaseReader(getActivity().getContentResolver()));
+        return new PostAsyncTaskLoader(getActivity(), blogsReader);
 
     }
 

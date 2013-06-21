@@ -9,21 +9,23 @@ import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Tables;
 import com.shivgadhia.android.tomato.persistance.TomatoProvider;
 
-public class SinglePostReader extends PostReader {
-    private String postId;
+public class PostReaderForBlog extends PostReader {
+    private final String blogName;
 
-    public SinglePostReader(DatabaseReader databaseReader, String postId) {
+    public PostReaderForBlog(DatabaseReader databaseReader, String blogName) {
         super(databaseReader);
-        this.postId = postId;
+
+        this.blogName = blogName;
     }
 
     @Override
     protected Cursor getCursor() {
-        return databaseReader.getAllFrom(Tables.TBL_POSTS, Tables.Posts._ID + "=?", new String[]{postId});
+        return databaseReader.getAllFrom(Tables.TBL_POSTS, Tables.Posts.COL_BLOG_NAME + "=?", new String[]{blogName});
     }
 
     @Override
     public Loader<Cursor> getAll(Context context) {
-        return new CursorLoader(context, Uri.parse(TomatoProvider.AUTHORITY + Tables.TBL_POSTS), null, Tables.Posts._ID + "=?", new String[]{postId}, Tables.Posts.COL_POST_DATE + " DESC");
+        return new CursorLoader(context, Uri.parse(TomatoProvider.AUTHORITY + Tables.TBL_POSTS), null, Tables.Posts.COL_BLOG_NAME + "=?", new String[]{blogName}, Tables.Posts.COL_POST_DATE + " DESC");
     }
+
 }

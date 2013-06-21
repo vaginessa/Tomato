@@ -5,27 +5,27 @@ import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import com.shivgadhia.android.tomato.models.ImageModel;
-import com.shivgadhia.android.tomato.persistance.Posts.PostReader;
+import com.shivgadhia.android.tomato.models.ContentsListItem;
+import com.shivgadhia.android.tomato.persistance.Blogs.BlogsReader;
 
 import java.util.ArrayList;
 
-public class PostLoader implements LoaderManager.LoaderCallbacks<Cursor> {
-    ArrayList<ImageModel> imageModels;
-    public static final int LOADER_ID = 123;
+public class BlogsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
+    ArrayList<ContentsListItem> imageModels;
+    public static final int LOADER_ID = 124;
 
     private LoaderManager loaderManager;
-    private final PostReader postReader;
+    private final BlogsReader blogsReader;
     private Context context;
     private DataUpdatedListener dataUpdatedListener;
 
     public interface DataUpdatedListener {
-        void dataUpdated(ArrayList<ImageModel> list);
+        void dataUpdated(ArrayList<ContentsListItem> list);
     }
 
-    public PostLoader(Context context, LoaderManager lm, PostReader postReader, DataUpdatedListener dataUpdatedListener) {
+    public BlogsLoader(Context context, LoaderManager lm, BlogsReader blogsReader, DataUpdatedListener dataUpdatedListener) {
         loaderManager = lm;
-        this.postReader = postReader;
+        this.blogsReader = blogsReader;
         this.context = context;
         this.dataUpdatedListener = dataUpdatedListener;
     }
@@ -42,12 +42,12 @@ public class PostLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return postReader.getAll(context);
+        return blogsReader.getAll(context);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        imageModels = postReader.populateListWith(data);
+        imageModels = blogsReader.populateListWith(data);
         dataUpdatedListener.dataUpdated(imageModels);
     }
 
