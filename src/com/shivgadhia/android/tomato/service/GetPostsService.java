@@ -9,6 +9,7 @@ import com.tumblr.jumblr.exceptions.JumblrException;
 import com.tumblr.jumblr.types.Blog;
 import com.tumblr.jumblr.types.PhotoPost;
 import com.tumblr.jumblr.types.Post;
+import org.scribe.exceptions.OAuthConnectionException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,10 +44,15 @@ public class GetPostsService extends IntentService {
 
             broadcastFinishedMessage(blog);
         } catch (JumblrException e) {
-            e.printStackTrace();
-            broadcastErrorMessage(blogUrl);
+            handleError(blogUrl, e);
+        } catch (OAuthConnectionException e) {
+            handleError(blogUrl, e);
         }
+    }
 
+    private void handleError(String blogUrl, Exception e) {
+        e.printStackTrace();
+        broadcastErrorMessage(blogUrl);
     }
 
     private void broadcastFinishedMessage(Blog blog) {

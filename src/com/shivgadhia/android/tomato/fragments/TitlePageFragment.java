@@ -60,6 +60,10 @@ public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdat
         }
     };
 
+    private void clearEditText() {
+        blogNameInput.setText("");
+    }
+
     public void initLoader() {
         LoaderManager lm = getActivity().getLoaderManager();
         BlogsLoader loader = new BlogsLoader(getActivity(), lm, new BlogsReader(new DatabaseReader(getActivity().getContentResolver())), this);
@@ -110,6 +114,7 @@ public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdat
         @Override
         public void onReceive(Context context, Intent intent) {
             initLoader();
+            clearEditText();
         }
     }
 

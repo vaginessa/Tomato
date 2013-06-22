@@ -28,7 +28,6 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         mViewPager = new HackyViewPager(this);
         mViewPager.setId(0x7F04FFF0);
         mViewPager.setOffscreenPageLimit(1);
-
         setContentView(mViewPager);
 
         State state = new State(savedInstanceState);
@@ -60,14 +59,18 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
 
     @Override
     public void dataUpdated(ArrayList<ImageModel> list) {
+        int currentItem = mViewPager.getCurrentItem();
         SamplePagerAdapter samplePagerAdapter = new SamplePagerAdapter(getSupportFragmentManager(), list);
         mViewPager.setAdapter(samplePagerAdapter);
+        mViewPager.setCurrentItem(currentItem);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        new State(outState).saveBlogName(getBlogName());
+        State state = new State(outState);
+        state.saveBlogName(getBlogName());
+
 
     }
 
@@ -103,23 +106,19 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
 
     private static class State {
         private static final String STATE_BLOG_NAME = "blogName";
-        private Bundle outstate;
+        private Bundle state;
 
-        State(Bundle outstate) {
-            this.outstate = outstate;
-        }
-
-        private Bundle getOutstate() {
-            return outstate;
+        State(Bundle state) {
+            this.state = state;
         }
 
         public void saveBlogName(String blogname) {
-            outstate.putString(STATE_BLOG_NAME, blogname);
+            state.putString(STATE_BLOG_NAME, blogname);
         }
 
         public String getBlogName() {
-            if (outstate != null) {
-                return outstate.getString(STATE_BLOG_NAME);
+            if (state != null) {
+                return state.getString(STATE_BLOG_NAME);
             }
             return "";
         }
