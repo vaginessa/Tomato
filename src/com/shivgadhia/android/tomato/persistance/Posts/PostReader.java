@@ -50,8 +50,9 @@ public class PostReader {
         String url_small = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_SMALL));
         String url_big = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_PHOTO_IMAGE_LARGE));
         String title = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_BLOG_NAME));
+        String post_url = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts.COL_POST_URL));
         String post_id = cursor.getString(cursor.getColumnIndexOrThrow(Tables.Posts._ID));
-        return new ImageModel(url_small, url_big, title, post_id);
+        return new ImageModel(url_small, url_big, post_url, title, post_id);
     }
 
     public Loader<Cursor> getAll(Context context) {

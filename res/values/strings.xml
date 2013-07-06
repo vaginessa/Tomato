@@ -4,5 +4,7 @@
     <string name="hello">Hello World, TomatoActivity!</string>
     <string name="app_name">Tomato</string>
     <string name="menu_search">Search Tags</string>
+    <string name="send_to">Share Image Link</string>
+    <string name="go_to">Go to</string>
 
 </resources>
