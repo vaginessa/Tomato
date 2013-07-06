@@ -15,39 +15,72 @@
             android:layout_weight="1"
             android:layout_margin="5dp"
             />
-    <ImageView
-            android:id="@+id/page_three_images_1"
+    <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher"
             android:layout_margin="5dp"
-            />
-    <LinearLayout
-                  android:orientation="vertical"
-                  android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:layout_height="match_parent"
-                  android:gravity="fill"
+            android:animateLayoutChanges="true"
             >
-    <ImageView
-            android:id="@+id/page_three_images_2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
+        <ImageView
+                android:id="@+id/page_three_images_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher"
+                />
+        <include layout="@layout/include_image_actions"
+                 android:id="@+id/page_three_images_1_actions"
+                 android:layout_height="70dp"
+                 android:layout_width="match_parent"
+                 android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_launcher"
-            android:layout_margin="5dp"
-            />
-    <ImageView
-            android:id="@+id/page_three_images_3"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher"
-            android:layout_margin="5dp"
-            />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:gravity="fill"
+            >
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:animateLayoutChanges="true"
+                >
+            <ImageView
+                    android:id="@+id/page_three_images_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher"
+                    />
+            <include layout="@layout/include_image_actions"
+                     android:id="@+id/page_three_images_2_actions"
+                     android:layout_height="70dp"
+                     android:layout_width="match_parent"
+                     android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:animateLayoutChanges="true"
+                >
+            <ImageView
+                    android:id="@+id/page_three_images_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher"
+                    />
+            <include layout="@layout/include_image_actions"
+                     android:id="@+id/page_three_images_3_actions"
+                     android:layout_height="70dp"
+                     android:layout_width="match_parent"
+                     android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>
