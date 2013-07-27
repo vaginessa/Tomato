@@ -67,4 +67,6 @@ public class ThreeImagePageFragment extends PageLayoutFragment {
         actionsView.setVisibility(View.VISIBLE);
         //setText(imageModel.getTitle());
     }
+
+
 }
