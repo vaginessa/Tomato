@@ -6,5 +6,7 @@
     <string name="menu_search">Search Tags</string>
     <string name="send_to">Share Image Link</string>
     <string name="go_to">Go to</string>
+    <string name="action_refresh">refresh</string>
+    <string name="action_share">share</string>
 
 </resources>

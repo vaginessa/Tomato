@@ -1,10 +1,10 @@
 package com.shivgadhia.android.tomato.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.LinearLayout;
 import com.novoda.imageloader.core.model.ImageTag;
 import com.novoda.imageloader.core.model.ImageTagFactory;
@@ -24,6 +24,7 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
     public static final String EXTRA_POST_ID = "extraPostId";
     ImageTagFactory imageTagFactory;
     private HackyViewPager mViewPager;
+    private String postUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,43 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
         setContentView(mViewPager);
         imageTagFactory = new ImageTagFactory(this, R.drawable.ic_launcher);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        setupActionBar();
 
         initLoader();
     }
 
+    private void setupActionBar() {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_single_photo, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getPostUrl());
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
+                return true;
+            default:
+                return super.onMenuItemSelected(featureId, item);
+        }
+    }
+
+    private String getPostUrl() {
+        return postUrl;
+    }
 
     public void initLoader() {
         PostLoader postLoader = new PostLoader(this, getLoaderManager(), new SinglePostReader(new DatabaseReader(getContentResolver()), getPostId()), this);
@@ -50,6 +83,13 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
     @Override
     public void dataUpdated(ArrayList<ImageModel> list) {
         mViewPager.setAdapter(new SamplePagerAdapter(list));
+        postUrl = list.get(0).getPostUrl();
+        updateActionBar(list);
+    }
+
+    private void updateActionBar(ArrayList<ImageModel> list) {
+        getActionBar().setTitle(list.get(0).getTitle());
+        getActionBar().setSubtitle(getPostUrl());
     }
 
     private class SamplePagerAdapter extends PagerAdapter {

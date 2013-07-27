@@ -84,7 +84,6 @@ public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdat
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String url = data.get(position).asUrl();
-            fetchPosts(url);
 
             String blogName = data.get(position).getTitle();
             Intent showPosts = new Intent(getActivity(), PagesActivity.class);

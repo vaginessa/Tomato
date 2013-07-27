@@ -6,6 +6,7 @@ import com.shivgadhia.android.tomato.persistance.Tables;
 import com.tumblr.jumblr.types.Photo;
 import com.tumblr.jumblr.types.PhotoPost;
 import com.tumblr.jumblr.types.PhotoSize;
+import novoda.lib.sqliteprovider.util.DatabaseUtils;
 
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ public class PostWriter {
         values.put(Tables.Posts.COL_TAGS, Arrays.toString(post.getTags().toArray()));
         values.put(Tables.Posts.COL_SOURCE_URL, post.getSourceUrl());
 
-        values.put(Tables.Posts.COL_PHOTO_CAPTION, post.getCaption());
+        values.put(Tables.Posts.COL_PHOTO_CAPTION, DatabaseUtils.sqlEscapeString(post.getCaption()));
 
         for (int i = 0; i < post.getPhotos().size(); i++) {
             values.put(Tables.Posts.COL_PHOTO_IMAGE_SMALL, getSmallPhotoUrl(post, i));

@@ -15,11 +15,11 @@
                 android:label="@string/app_name"
                 android:theme="@style/Tomato"
                 android:configChanges="orientation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
+            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--<category android:name="android.intent.category.DEFAULT"/>-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -40,11 +40,12 @@
                 android:name=".activities.TitlePageActivity"
                 android:label="PhotoView"
                 android:theme="@style/Tomato"
+                android:windowSoftInputMode="stateHidden"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 

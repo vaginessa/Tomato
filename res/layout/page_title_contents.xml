@@ -38,6 +38,7 @@
                 android:text="Contents..."
                 android:textStyle="bold"
                 android:textSize="40sp"
+
                 />
         <LinearLayout
                 android:orientation="horizontal"
