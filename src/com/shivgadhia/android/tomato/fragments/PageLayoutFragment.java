@@ -14,10 +14,10 @@ import com.shivgadhia.android.tomato.TomatoApplication;
 import com.shivgadhia.android.tomato.activities.PhotoViewPagerActivity;
 import com.shivgadhia.android.tomato.models.ImageModel;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public abstract class PageLayoutFragment extends Fragment {
-    protected List<ImageModel> images;
+    protected ArrayList<ImageModel> images;
     ImageTagFactory imageTagFactory;
     protected int position;
 
@@ -26,10 +26,15 @@ public abstract class PageLayoutFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        State state = new State(savedInstanceState);
+        ArrayList<ImageModel> savedImages = state.getSavedImages();
+        if (savedImages != null && !savedImages.isEmpty()) {
+            setImages(savedImages);
+        }
+        setPosition(state.getSavedPosition());
     }
 
-    public void setImages(List<ImageModel> images) {
+    public void setImages(ArrayList<ImageModel> images) {
         this.images = images;
     }
 
@@ -117,5 +122,43 @@ public abstract class PageLayoutFragment extends Fragment {
 
     protected void setPosition(int pos) {
         this.position = pos;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        State state = new State(outState);
+        state.saveImages(images);
+        state.savePosition(position);
+    }
+
+    private static class State {
+        private static final String KEY_IMAGES = "key_images";
+        private static final String KEY_POSITION = "key_position";
+        private Bundle state;
+
+        public State(Bundle state) {
+            if (state == null) {
+                this.state = new Bundle();
+            } else {
+                this.state = state;
+            }
+        }
+
+        public void saveImages(ArrayList<ImageModel> images) {
+            this.state.putParcelableArrayList(KEY_IMAGES, images);
+        }
+
+        public void savePosition(int pos) {
+            this.state.putInt(KEY_POSITION, pos);
+        }
+
+        public ArrayList<ImageModel> getSavedImages() {
+            return this.state.getParcelableArrayList(KEY_IMAGES);
+        }
+
+        public int getSavedPosition() {
+            return this.state.getInt(KEY_POSITION, 0);
+        }
     }
 }

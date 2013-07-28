@@ -51,4 +51,14 @@
             android:background="@drawable/list_selector_holo_light"
             android:duplicateParentState="false"
             />
+    <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:padding="12dip"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_action_delete"
+            android:background="@drawable/list_selector_holo_light"
+            android:duplicateParentState="false"
+            />
 </LinearLayout>

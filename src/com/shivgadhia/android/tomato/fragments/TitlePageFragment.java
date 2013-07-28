@@ -20,12 +20,14 @@ import com.shivgadhia.android.tomato.loaders.BlogsLoader;
 import com.shivgadhia.android.tomato.models.ContentsListItem;
 import com.shivgadhia.android.tomato.persistance.Blogs.BlogsReader;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
+import com.shivgadhia.android.tomato.persistance.DatabaseWriter;
+import com.shivgadhia.android.tomato.persistance.Posts.PostWriter;
 import com.shivgadhia.android.tomato.service.GetPostsReceiver;
 import com.shivgadhia.android.tomato.service.GetPostsService;
 
 import java.util.ArrayList;
 
-public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdatedListener, ContentsAdapter.RefreshClickedListener {
+public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdatedListener, ContentsAdapter.ActionsListener {
 
     private ListView contentsList;
     private ArrayList<ContentsListItem> data;
@@ -109,6 +111,11 @@ public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdat
     @Override
     public void onRefreshClicked(ContentsListItem item) {
         fetchPosts(item.asUrl());
+    }
+
+    @Override
+    public void onDeleteClicked(ContentsListItem item) {
+        new PostWriter(new DatabaseWriter(getActivity().getContentResolver())).deletePostsFor(item.getTitle());
     }
 
     private class PostsFetchedReceiver extends BroadcastReceiver {

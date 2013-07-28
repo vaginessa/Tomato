@@ -27,15 +27,18 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
 
         createViewPager();
         setContentView(mViewPager);
-        State state = new State(savedInstanceState);
-        String blogName = state.getBlogName();
 
-        if (blogName.isEmpty()) {
-            blogName = getBlogName();
-        }
+        String blogName = getBlogName();
 
         setupActionbar(blogName);
         initLoader(blogName);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+        State state = new State(savedInstanceState);
+        mViewPager.setCurrentItem(state.getSavedCurrentItem());
     }
 
     private void createViewPager() {
@@ -74,6 +77,7 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         super.onSaveInstanceState(outState);
         State state = new State(outState);
         state.saveBlogName(getBlogName());
+        state.saveCurrentItem(mViewPager.getCurrentItem());
     }
 
     private class SamplePagerAdapter extends FragmentPagerAdapter {
@@ -94,7 +98,7 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         private Fragment getPage(int position) {
             int startPos = (position) * 3;
             ThreeImagePageFragment fragment = (ThreeImagePageFragment) ThreeImagePageFragment.newInstance(position);
-            fragment.setImages(images.subList(startPos, startPos + 3));
+            fragment.setImages(new ArrayList<ImageModel>(images.subList(startPos, startPos + 3)));
             return fragment;
 
         }
@@ -108,10 +112,15 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
 
     private static class State {
         private static final String STATE_BLOG_NAME = "blogName";
+        private static final String STATE_CURRENT_ITEM = "currentItem";
         private Bundle state;
 
         State(Bundle state) {
-            this.state = state;
+            if (state == null) {
+                this.state = new Bundle();
+            } else {
+                this.state = state;
+            }
         }
 
         public void saveBlogName(String blogname) {
@@ -119,10 +128,15 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         }
 
         public String getBlogName() {
-            if (state != null) {
-                return state.getString(STATE_BLOG_NAME);
-            }
-            return "";
+            return state.getString(STATE_BLOG_NAME, "");
+        }
+
+        public int getSavedCurrentItem() {
+            return state.getInt(STATE_CURRENT_ITEM, 0);
+        }
+
+        public void saveCurrentItem(int pos) {
+            state.putInt(STATE_CURRENT_ITEM, pos);
         }
     }
 }

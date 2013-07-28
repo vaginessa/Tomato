@@ -38,6 +38,12 @@ public class PostWriter {
             databaseWriter.saveDataToPostsTable(values);
         }
 
+        for (String tag : post.getTags()) {
+            ContentValues tagsValues = new ContentValues();
+            tagsValues.put(Tables.TagsForPosts.COL_TAG, tag);
+            databaseWriter.saveTagsForPosts(tagsValues);
+        }
+
     }
 
     private String getSmallPhotoUrl(PhotoPost post, int i) {
@@ -54,5 +60,9 @@ public class PostWriter {
         Photo photo = post.getPhotos().get(i);
         PhotoSize bigPhoto = photo.getSizes().get(0);
         return bigPhoto.getUrl();
+    }
+
+    public void deletePostsFor(String blogName) {
+        databaseWriter.deletePostsAndTags(blogName);
     }
 }

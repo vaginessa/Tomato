@@ -16,11 +16,17 @@ public class ContentsAdapter extends BaseAdapter {
     private final Context context;
     private final ArrayList<ContentsListItem> data;
     private LayoutInflater inflater;
-    private ContentsAdapter.RefreshClickedListener refreshClickedListener;
+    private ActionsListener actionsListener;
 
-    public ContentsAdapter(Context context, ArrayList<ContentsListItem> data, RefreshClickedListener refreshClickedListener) {
+    public interface ActionsListener {
+        void onRefreshClicked(ContentsListItem item);
+
+        void onDeleteClicked(ContentsListItem item);
+    }
+
+    public ContentsAdapter(Context context, ArrayList<ContentsListItem> data, ActionsListener actionsListener) {
         this.context = context;
-        this.refreshClickedListener = refreshClickedListener;
+        this.actionsListener = actionsListener;
         inflater = LayoutInflater.from(context);
         if (data == null) {
             this.data = new ArrayList<ContentsListItem>();
@@ -44,12 +50,12 @@ public class ContentsAdapter extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         return createViewFromResource(position, convertView, parent, R.layout.contents_list_item);
     }
-
 
     private View createViewFromResource(int position, View convertView, ViewGroup parent,
                                         int resource) {
@@ -57,6 +63,7 @@ public class ContentsAdapter extends BaseAdapter {
         TextView text1;
         TextView text2;
         ImageButton refreshButton;
+        ImageButton deleteButton;
 
         if (convertView == null) {
             view = inflater.inflate(resource, parent, false);
@@ -74,22 +81,28 @@ public class ContentsAdapter extends BaseAdapter {
 
         refreshButton = (ImageButton) view.findViewById(R.id.refresh);
         refreshButton.setOnClickListener(createRefreshClickedListener(item, text2));
-
+        deleteButton = (ImageButton) view.findViewById(R.id.delete);
+        deleteButton.setOnClickListener(createDeleteClickedListener(item));
 
         return view;
+    }
+
+    private View.OnClickListener createDeleteClickedListener(final ContentsListItem item) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionsListener.onDeleteClicked(item);
+            }
+        };
     }
 
     private View.OnClickListener createRefreshClickedListener(final ContentsListItem item, final TextView text2) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshClickedListener.onRefreshClicked(item);
+                actionsListener.onRefreshClicked(item);
                 text2.setText("Updating...");
             }
         };
-    }
-
-    public interface RefreshClickedListener {
-        void onRefreshClicked(ContentsListItem item);
     }
 }
