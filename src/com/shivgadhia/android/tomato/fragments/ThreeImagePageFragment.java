@@ -60,12 +60,16 @@ public class ThreeImagePageFragment extends PageLayoutFragment {
     }
 
     @Override
-    protected void onImageClicked(ImageModel imageModel, LinearLayout actionsView) {
+    protected void onImageLongClicked(ImageModel imageModel, LinearLayout actionsView) {
         one_actions.setVisibility(View.GONE);
         two_actions.setVisibility(View.GONE);
         three_actions.setVisibility(View.GONE);
         actionsView.setVisibility(View.VISIBLE);
-        //setText(imageModel.getTitle());
+    }
+
+    @Override
+    protected void onImageClicked(ImageModel imageModel, LinearLayout actionsView) {
+        showPhoto(imageModel.getPostId());
     }
 
 

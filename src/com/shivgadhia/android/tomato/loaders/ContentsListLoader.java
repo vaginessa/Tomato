@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ContentsListLoader extends AsyncTaskLoader<ArrayList<ContentsListItem>> {
     ArrayList<ContentsListItem> blogs;
-    public static final int LOADER_ID = 123;
+    public static final int LOADER_ID = 125;
 
     private final BlogsReader blogsReader;
 

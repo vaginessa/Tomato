@@ -40,6 +40,7 @@ public abstract class PageLayoutFragment extends Fragment {
             TomatoApplication.getImageManager().getLoader().load(imageView);
 
             imageView.setOnClickListener(createClickListener(imageModel, actionsView));
+            imageView.setOnLongClickListener(createLongPressListener(imageModel, actionsView));
             setupClickListenersForActionView(actionsView, imageModel);
 
         } catch (IndexOutOfBoundsException e) {
@@ -93,6 +94,18 @@ public abstract class PageLayoutFragment extends Fragment {
             }
         };
     }
+
+    private View.OnLongClickListener createLongPressListener(final ImageModel imageModel, final LinearLayout actionsView) {
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onImageLongClicked(imageModel, actionsView);
+                return true;
+            }
+        };
+    }
+
+    protected abstract void onImageLongClicked(ImageModel imageModel, LinearLayout actionsView);
 
     protected abstract void onImageClicked(ImageModel imageModel, LinearLayout actionsView);
 

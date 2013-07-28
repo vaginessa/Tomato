@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class PostAsyncTaskLoader extends AsyncTaskLoader<ArrayList<ImageModel>> {
     ArrayList<ImageModel> mImageModels;
-    public static final int LOADER_ID = 123;
+    public static final int LOADER_ID = 126;
 
     private final PostReader blogsReader;
 

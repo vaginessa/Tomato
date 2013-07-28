@@ -31,11 +31,8 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewPager = new HackyViewPager(this);
-        mViewPager.setId(0x7F04FFF0);
-        mViewPager.setOffscreenPageLimit(1);
+        createViewPager();
         setContentView(mViewPager);
-
         State state = new State(savedInstanceState);
         String blogName = state.getBlogName();
 
@@ -45,6 +42,12 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
 
         setupActionbar(blogName);
         initLoader(blogName);
+    }
+
+    private void createViewPager() {
+        mViewPager = new HackyViewPager(this);
+        mViewPager.setId(0x7F04FFF0);
+        mViewPager.setOffscreenPageLimit(1);
     }
 
     private void initLoader(String blogName) {
@@ -97,6 +100,7 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         mViewPager.setAdapter(samplePagerAdapter);
         mViewPager.setCurrentItem(currentItem);
         mViewPager.requestLayout();
+        samplePagerAdapter.notifyDataSetChanged();
     }
 
     @Override
