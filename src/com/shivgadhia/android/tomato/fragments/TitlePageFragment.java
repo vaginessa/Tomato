@@ -10,7 +10,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.activities.PagesActivity;
 import com.shivgadhia.android.tomato.loaders.BlogsLoader;
@@ -22,7 +25,7 @@ import com.shivgadhia.android.tomato.service.GetPostsService;
 
 import java.util.ArrayList;
 
-public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdatedListener {
+public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdatedListener, ContentsAdapter.RefreshClickedListener {
 
     private ListView contentsList;
     private ArrayList<ContentsListItem> data;
@@ -73,8 +76,7 @@ public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdat
     @Override
     public void dataUpdated(ArrayList<ContentsListItem> list) {
         this.data = list;
-        ArrayAdapter<ContentsListItem> adapter = new ArrayAdapter<ContentsListItem>(getActivity(),
-                android.R.layout.simple_list_item_1, data);
+        ContentsAdapter adapter = new ContentsAdapter(getActivity(), data, this);
         contentsList.setAdapter(adapter);
         contentsList.setOnItemClickListener(onBlogTitleClicked);
     }
@@ -102,6 +104,11 @@ public class TitlePageFragment extends Fragment implements BlogsLoader.DataUpdat
     public void onDestroy() {
         getActivity().unregisterReceiver(receiver);
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefreshClicked(ContentsListItem item) {
+        fetchPosts(item.asUrl());
     }
 
     private class PostsFetchedReceiver extends BroadcastReceiver {

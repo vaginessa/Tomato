@@ -1,21 +1,15 @@
 package com.shivgadhia.android.tomato.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.fragments.ThreeImagePageFragment;
 import com.shivgadhia.android.tomato.loaders.PostLoader;
 import com.shivgadhia.android.tomato.models.ImageModel;
 import com.shivgadhia.android.tomato.persistance.DatabaseReader;
 import com.shivgadhia.android.tomato.persistance.Posts.PostReaderForBlog;
-import com.shivgadhia.android.tomato.service.GetPostsService;
 import uk.co.senab.photoview.sample.HackyViewPager;
 
 import java.util.ArrayList;
@@ -62,33 +56,6 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         getActionBar().setTitle(title);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_blog_pages, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                fetchPosts(getBlogName() + ".tumblr.com");
-                return true;
-            default:
-                return super.onMenuItemSelected(featureId, item);
-        }
-
-    }
-
-    private void fetchPosts(String url) {
-        Intent msgIntent = new Intent(this, GetPostsService.class);
-        msgIntent.putExtra(GetPostsService.PARAM_IN_POST_URL, url);
-        startService(msgIntent);
-    }
-
-
     private String getBlogName() {
         return getIntent().getStringExtra(EXTRA_BLOG_NAME);
     }
@@ -100,7 +67,6 @@ public class PagesActivity extends FragmentActivity implements PostLoader.DataUp
         mViewPager.setAdapter(samplePagerAdapter);
         mViewPager.setCurrentItem(currentItem);
         mViewPager.requestLayout();
-        samplePagerAdapter.notifyDataSetChanged();
     }
 
     @Override
