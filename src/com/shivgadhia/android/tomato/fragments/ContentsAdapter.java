@@ -101,7 +101,6 @@ public class ContentsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 actionsListener.onRefreshClicked(item);
-                text2.setText("Updating...");
             }
         };
     }

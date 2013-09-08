@@ -31,7 +31,7 @@ public abstract class PageLayoutFragment extends Fragment {
         if (savedImages != null && !savedImages.isEmpty()) {
             setImages(savedImages);
         }
-        setPosition(state.getSavedPosition());
+        setRetainInstance(true);
     }
 
     public void setImages(ArrayList<ImageModel> images) {
@@ -129,7 +129,6 @@ public abstract class PageLayoutFragment extends Fragment {
         super.onSaveInstanceState(outState);
         State state = new State(outState);
         state.saveImages(images);
-        state.savePosition(position);
     }
 
     private static class State {
@@ -149,16 +148,8 @@ public abstract class PageLayoutFragment extends Fragment {
             this.state.putParcelableArrayList(KEY_IMAGES, images);
         }
 
-        public void savePosition(int pos) {
-            this.state.putInt(KEY_POSITION, pos);
-        }
-
         public ArrayList<ImageModel> getSavedImages() {
             return this.state.getParcelableArrayList(KEY_IMAGES);
-        }
-
-        public int getSavedPosition() {
-            return this.state.getInt(KEY_POSITION, 0);
         }
     }
 }

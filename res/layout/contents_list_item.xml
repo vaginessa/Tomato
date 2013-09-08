@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
-              android:gravity="center_vertical"
-              android:paddingLeft="16dip"
-              android:paddingRight="12dip"
+              android:padding="5dp"
+              android:gravity="center"
               android:minHeight="?android:attr/listPreferredItemHeightSmall"
               android:descendantFocusability="blocksDescendants"
+              android:background="@android:color/black"
         >
     <LinearLayout
             android:layout_width="wrap_content"
@@ -22,11 +22,13 @@
         <TextView android:id="@+id/text1"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textAppearance="?android:attr/textAppearanceMedium"
-                  android:textColor="?android:attr/textColorAlertDialogListItem"
+                  android:textAppearance="?android:attr/textAppearanceLarge"
+                  android:textColor="@android:color/white"
+                  android:textAllCaps="true"
                   android:gravity="center_vertical|start"
                   android:singleLine="true"
                   android:ellipsize="marquee"
+                  android:textStyle="bold"
                   android:duplicateParentState="true"
 
                 />
@@ -34,7 +36,7 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textAppearance="?android:attr/textAppearanceSmall"
-                  android:textColor="?android:attr/textColorAlertDialogListItem"
+                  android:textColor="@android:color/darker_gray"
                   android:gravity="center_vertical|start"
                   android:singleLine="true"
                   android:ellipsize="marquee"
@@ -50,6 +52,7 @@
             android:src="@drawable/ic_action_refresh"
             android:background="@drawable/list_selector_holo_light"
             android:duplicateParentState="false"
+            android:layout_marginLeft="10dp"
             />
     <ImageButton
             android:id="@+id/delete"
@@ -60,5 +63,6 @@
             android:src="@drawable/ic_action_delete"
             android:background="@drawable/list_selector_holo_light"
             android:duplicateParentState="false"
+            android:layout_marginLeft="10dp"
             />
 </LinearLayout>

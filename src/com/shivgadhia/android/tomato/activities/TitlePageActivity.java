@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Window;
 import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.persistance.Tables;
 import com.shivgadhia.android.tomato.persistance.TomatoProvider;
@@ -25,8 +26,9 @@ public class TitlePageActivity extends FragmentActivity {
     }
 
     private void setupActionbar() {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
-        getActionBar().setDisplayShowTitleEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
     }
 }

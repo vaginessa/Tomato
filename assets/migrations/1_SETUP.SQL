@@ -1,4 +1,4 @@
-CREATE TABLE 'POSTS'(_id INTEGER PRIMARY KEY AUTOINCREMENT,blog_name TEXT,id TEXT, post_url TEXT,type TEXT,post_time TEXT,post_date TEXT,tags TEXT,source_url TEXT,source_title TEXT,post_photo_caption TEXT,post_photo_image_small TEXT UNIQUE ON CONFLICT REPLACE,post_photo_image_large TEXT UNIQUE ON CONFLICT REPLACE);
+CREATE TABLE 'POSTS'(_id INTEGER PRIMARY KEY AUTOINCREMENT,blog_name TEXT,id TEXT, post_url TEXT,type TEXT,post_time TEXT,post_date TEXT,tags TEXT,source_url TEXT,source_title TEXT,post_photo_caption TEXT,post_photo_image_small TEXT UNIQUE ON CONFLICT IGNORE,post_photo_image_large TEXT UNIQUE ON CONFLICT IGNORE);
 
 CREATE TABLE 'TAGS_FOR_POSTS'(_id INTEGER PRIMARY KEY AUTOINCREMENT, tag TEXT UNIQUE ON CONFLICT IGNORE);
 
