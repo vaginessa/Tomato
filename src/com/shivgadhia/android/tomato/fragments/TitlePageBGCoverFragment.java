@@ -3,9 +3,7 @@ package com.shivgadhia.android.tomato.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import com.novoda.imageloader.core.model.ImageTag;
 import com.novoda.imageloader.core.model.ImageTagFactory;
@@ -31,6 +29,7 @@ public class TitlePageBGCoverFragment extends Fragment implements PostLoader.Dat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imageTagFactory = new ImageTagFactory(getActivity(), R.drawable.ic_launcher);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -44,6 +43,21 @@ public class TitlePageBGCoverFragment extends Fragment implements PostLoader.Dat
             initLoader();
         }
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.actionbar_title_page_cover, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_refresh) {
+            initLoader();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void initLoader() {
