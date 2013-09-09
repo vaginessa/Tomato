@@ -2,6 +2,7 @@ package com.shivgadhia.android.tomato.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ public class TitlePageBGCoverFragment extends Fragment implements PostLoader.Dat
     private ImageTagFactory imageTagFactory;
     private PostLoader postLoader;
 
+    private String bgImageUrl = "";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,17 +34,15 @@ public class TitlePageBGCoverFragment extends Fragment implements PostLoader.Dat
     }
 
     @Override
-    public void onResume() {
-        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
-        initLoader();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.page_title_bg_cover, container, false);
         coverBackground = (ImageView) v.findViewById(R.id.page_title_bg);
-
-        initLoader();
+        State state = new State(savedInstanceState);
+        if (state.hasImageUrl()) {
+            setImage(state.getImageUrl());
+        } else {
+            initLoader();
+        }
         return v;
     }
 
@@ -53,23 +54,49 @@ public class TitlePageBGCoverFragment extends Fragment implements PostLoader.Dat
     @Override
     public void dataUpdated(ArrayList<ImageModel> list) {
         postLoader.destroyLoader();
-        if (list.isEmpty()) {
-            setDefaultImage();
-        } else {
+        if (!list.isEmpty()) {
             ImageModel imageModel = list.get(0);
             String imageUrl = imageModel.getBigUrl();
-
             setImage(imageUrl);
         }
     }
 
-    private void setDefaultImage() {
-        //To change body of created methods use File | Settings | File Templates.
-    }
-
     private void setImage(String imageUrl) {
+        bgImageUrl = imageUrl;
         ImageTag tag = imageTagFactory.build(imageUrl);
         coverBackground.setTag(tag);
         TomatoApplication.getImageManager().getLoader().load(coverBackground);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        new State(outState).setSavedImageUrl(bgImageUrl);
+    }
+
+    private class State {
+        private static final String SAVED_IMAGE_URL = "savedImageUrl";
+        private Bundle bundle;
+
+        public State(Bundle bundle) {
+            if (bundle == null) {
+                this.bundle = new Bundle();
+            } else {
+                this.bundle = bundle;
+            }
+        }
+
+        public String getImageUrl() {
+            return bundle.getString(SAVED_IMAGE_URL);
+        }
+
+        public void setSavedImageUrl(String imageUrl) {
+            bundle.putString(SAVED_IMAGE_URL, imageUrl);
+        }
+
+        public boolean hasImageUrl() {
+            return !TextUtils.isEmpty(getImageUrl());
+        }
     }
 }

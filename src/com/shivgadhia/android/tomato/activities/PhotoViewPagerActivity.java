@@ -1,7 +1,9 @@
 package com.shivgadhia.android.tomato.activities;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.view.*;
@@ -25,6 +27,8 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
     ImageTagFactory imageTagFactory;
     private HackyViewPager mViewPager;
     private String postUrl;
+    private String bigImageUrl;
+    private DownloadManager downloadManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
         setupActionBar();
 
         initLoader();
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
     }
 
     private void setupActionBar() {
@@ -62,6 +67,10 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
                 return true;
+            case R.id.action_download:
+                Uri Download_Uri = Uri.parse(bigImageUrl);
+                DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
+                downloadManager.enqueue(request);
             default:
                 return super.onMenuItemSelected(featureId, item);
         }
@@ -84,6 +93,7 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
     public void dataUpdated(ArrayList<ImageModel> list) {
         mViewPager.setAdapter(new SamplePagerAdapter(list));
         postUrl = list.get(0).getPostUrl();
+        bigImageUrl = list.get(0).getBigUrl();
         updateActionBar(list);
     }
 

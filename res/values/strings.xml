@@ -8,5 +8,6 @@
     <string name="go_to">Go to</string>
     <string name="action_refresh">refresh</string>
     <string name="action_share">share</string>
+    <string name="action_download">download</string>
 
 </resources>
