@@ -68,8 +68,8 @@ public class ThreeImagePageFragment extends PageLayoutFragment {
     }
 
     @Override
-    protected void onImageClicked(ImageModel imageModel, LinearLayout actionsView) {
-        showPhoto(imageModel.getPostId());
+    protected void onImageClicked(ImageView imageView, ImageModel imageModel, LinearLayout actionsView) {
+        showPhoto(imageView, imageModel.getPostId());
     }
 
 

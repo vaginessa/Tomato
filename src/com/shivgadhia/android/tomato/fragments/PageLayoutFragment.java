@@ -1,6 +1,9 @@
 package com.shivgadhia.android.tomato.fragments;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -44,7 +47,7 @@ public abstract class PageLayoutFragment extends Fragment {
             imageView.setTag(tag);
             TomatoApplication.getImageManager().getLoader().load(imageView);
 
-            imageView.setOnClickListener(createClickListener(imageModel, actionsView));
+            imageView.setOnClickListener(createClickListener(imageView, imageModel, actionsView));
             imageView.setOnLongClickListener(createLongPressListener(imageModel, actionsView));
             setupClickListenersForActionView(actionsView, imageModel);
 
@@ -86,16 +89,16 @@ public abstract class PageLayoutFragment extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPhoto(postId);
+                showPhoto((ImageView) v, postId);
             }
         };
     }
 
-    private View.OnClickListener createClickListener(final ImageModel imageModel, final LinearLayout actionsView) {
+    private View.OnClickListener createClickListener(final ImageView imageView, final ImageModel imageModel, final LinearLayout actionsView) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onImageClicked(imageModel, actionsView);
+                onImageClicked(imageView, imageModel, actionsView);
             }
         };
     }
@@ -112,12 +115,18 @@ public abstract class PageLayoutFragment extends Fragment {
 
     protected abstract void onImageLongClicked(ImageModel imageModel, LinearLayout actionsView);
 
-    protected abstract void onImageClicked(ImageModel imageModel, LinearLayout actionsView);
+    protected abstract void onImageClicked(ImageView imageView, ImageModel imageModel, LinearLayout actionsView);
 
-    protected void showPhoto(String postId) {
-        Intent showPhoto = new Intent(getActivity(), PhotoViewPagerActivity.class);
-        showPhoto.putExtra(PhotoViewPagerActivity.EXTRA_POST_ID, postId);
-        startActivity(showPhoto);
+    protected void showPhoto(ImageView imageView, String postId) {
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bm = drawable.getBitmap();
+        Intent subActivity = new Intent(getActivity(), PhotoViewPagerActivity.class);
+        subActivity.putExtra(PhotoViewPagerActivity.EXTRA_POST_ID, postId);
+        Bundle scaleBundle = ActivityOptions.makeThumbnailScaleUpAnimation(
+                imageView, bm, 0, 0).toBundle();
+        getActivity().startActivity(subActivity, scaleBundle);
+
+
     }
 
     protected void setPosition(int pos) {
