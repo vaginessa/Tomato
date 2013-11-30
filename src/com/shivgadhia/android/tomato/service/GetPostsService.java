@@ -32,14 +32,24 @@ public class GetPostsService extends IntentService {
             Blog blog = client.blogInfo(blogUrl);
             blog.getTitle();
 
+            List<Post> posts;
+
             Map<String, String> options = new HashMap<String, String>();
             options.put("type", "photo");
-            List<Post> posts = blog.posts(options);
+
+
+            if (blogUrl.endsWith(".tumblr.com")) {
+                posts = blog.posts(options);
+            } else {
+                posts = client.tagged(blogUrl, options);
+            }
 
             DatabaseWriter databaseWriter = new DatabaseWriter(getContentResolver());
             PostWriter postWriter = new PostWriter(databaseWriter);
             for (Post p : posts) {
-                postWriter.savePost((PhotoPost) p);
+                if (p.getType().equalsIgnoreCase("photo")) {
+                    postWriter.savePost((PhotoPost) p);
+                }
             }
 
             broadcastFinishedMessage(blog);
