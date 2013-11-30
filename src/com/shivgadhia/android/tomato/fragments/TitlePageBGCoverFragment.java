@@ -53,9 +53,13 @@ public class TitlePageBGCoverFragment extends Fragment implements PostLoader.Dat
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_refresh) {
-            initLoader();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                initLoader();
+                return true;
+            case R.id.action_clear_cache:
+                TomatoApplication.getImageManager().getCacheManager().clean();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

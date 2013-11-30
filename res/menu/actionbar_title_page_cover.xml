@@ -6,4 +6,9 @@
           android:showAsAction="always"
             />
 
+    <item android:id="@+id/action_clear_cache"
+          android:title="@string/action_clear_cache"
+          android:showAsAction="never"
+            />
+
 </menu>
