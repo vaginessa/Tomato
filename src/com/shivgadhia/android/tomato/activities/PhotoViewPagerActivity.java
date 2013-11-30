@@ -60,6 +60,10 @@ public class PhotoViewPagerActivity extends Activity implements PostLoader.DataU
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_go:
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(postUrl));
+                startActivity(Intent.createChooser(i, getResources().getText(R.string.go_to)));
+                return true;
             case R.id.action_share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

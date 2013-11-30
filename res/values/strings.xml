@@ -10,5 +10,6 @@
     <string name="action_share">share</string>
     <string name="action_download">download</string>
     <string name="action_refresh_cover">Refresh cover</string>
+    <string name="action_go">Go</string>
 
 </resources>

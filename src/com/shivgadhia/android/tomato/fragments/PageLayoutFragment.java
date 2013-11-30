@@ -4,15 +4,12 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import com.novoda.imageloader.core.model.ImageTag;
 import com.novoda.imageloader.core.model.ImageTagFactory;
-import com.shivgadhia.android.tomato.R;
 import com.shivgadhia.android.tomato.TomatoApplication;
 import com.shivgadhia.android.tomato.activities.PhotoViewPagerActivity;
 import com.shivgadhia.android.tomato.models.ImageModel;
@@ -41,81 +38,29 @@ public abstract class PageLayoutFragment extends Fragment {
         this.images = images;
     }
 
-    protected void setImage(ImageView imageView, LinearLayout actionsView, ImageModel imageModel) {
+    protected void setImage(ImageView imageView, ImageModel imageModel) {
         try {
             ImageTag tag = imageTagFactory.build(imageModel.getSmallUrl());
             imageView.setTag(tag);
             TomatoApplication.getImageManager().getLoader().load(imageView);
 
-            imageView.setOnClickListener(createClickListener(imageView, imageModel, actionsView));
-            imageView.setOnLongClickListener(createLongPressListener(imageModel, actionsView));
-            setupClickListenersForActionView(actionsView, imageModel);
+            imageView.setOnClickListener(createClickListener(imageView, imageModel));
 
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
 
-    private void setupClickListenersForActionView(LinearLayout actionsView, ImageModel imageModel) {
-        actionsView.findViewById(R.id.btn_open).setOnClickListener(createOnOpenClicked(imageModel.getPostId()));
-        actionsView.findViewById(R.id.btn_share).setOnClickListener(createOnShareClicked(imageModel));
-        actionsView.findViewById(R.id.btn_go).setOnClickListener(createOnGoClicked(imageModel));
-    }
-
-    private View.OnClickListener createOnGoClicked(final ImageModel imageModel) {
+    private View.OnClickListener createClickListener(final ImageView imageView, final ImageModel imageModel) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(imageModel.getPostUrl()));
-                startActivity(Intent.createChooser(i, getResources().getText(R.string.go_to)));
+                onImageClicked(imageView, imageModel);
             }
         };
     }
 
-    private View.OnClickListener createOnShareClicked(final ImageModel imageModel) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, imageModel.getPostUrl());
-                sendIntent.setType("text/plain");
-                startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
-            }
-        };
-    }
-
-    private View.OnClickListener createOnOpenClicked(final String postId) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPhoto((ImageView) v, postId);
-            }
-        };
-    }
-
-    private View.OnClickListener createClickListener(final ImageView imageView, final ImageModel imageModel, final LinearLayout actionsView) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onImageClicked(imageView, imageModel, actionsView);
-            }
-        };
-    }
-
-    private View.OnLongClickListener createLongPressListener(final ImageModel imageModel, final LinearLayout actionsView) {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onImageLongClicked(imageModel, actionsView);
-                return true;
-            }
-        };
-    }
-
-    protected abstract void onImageLongClicked(ImageModel imageModel, LinearLayout actionsView);
-
-    protected abstract void onImageClicked(ImageView imageView, ImageModel imageModel, LinearLayout actionsView);
+    protected abstract void onImageClicked(ImageView imageView, ImageModel imageModel);
 
     protected void showPhoto(ImageView imageView, String postId) {
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
